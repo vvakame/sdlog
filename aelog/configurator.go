@@ -2,12 +2,13 @@ package aelog
 
 import (
 	"context"
-	"github.com/vvakame/sdlog/buildlog"
-	"go.opencensus.io/exporter/stackdriver/propagation"
-	"go.opencensus.io/trace"
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/vvakame/sdlog/buildlog"
+	"go.opencensus.io/exporter/stackdriver/propagation"
+	"go.opencensus.io/trace"
 )
 
 var _ buildlog.Configurator = (*aeConfigurator)(nil)

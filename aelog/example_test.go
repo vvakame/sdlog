@@ -3,11 +3,12 @@ package aelog_test
 import (
 	"context"
 	"fmt"
-	"github.com/vvakame/sdlog/aelog"
-	"go.opencensus.io/trace"
 	"net/http"
 	"os"
 	"runtime/debug"
+
+	"github.com/vvakame/sdlog/aelog"
+	"go.opencensus.io/trace"
 )
 
 func Example() {
@@ -26,7 +27,7 @@ func Example() {
 	aelog.Debugf(ctx, "appengine compat log: %s", "💕 AppEngine")
 }
 
-func Example_WithOpenCensus() {
+func Example_withOpenCensus() {
 	_ = os.Setenv("GAE_APPLICATION", "example")
 
 	// in your app...
@@ -37,7 +38,7 @@ func Example_WithOpenCensus() {
 	aelog.Debugf(ctx, "appengine compat log: %s", "💕 AppEngine")
 }
 
-func Example_Recover() {
+func Example_withRecover() {
 	_ = os.Setenv("GAE_APPLICATION", "example")
 
 	// in your app...

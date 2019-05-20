@@ -2,24 +2,31 @@ package buildlog
 
 import (
 	"context"
-	"go.opencensus.io/trace"
 	"net/http"
 	"os"
 	"strings"
+
+	"go.opencensus.io/trace"
 )
 
 var _ Configurator = (*appengineConfigurator)(nil)
 
-type appengineConfigurator struct {}
+type appengineConfigurator struct{}
 
 func (cfg *appengineConfigurator) ProjectID() string {
-	// TODO ちゃんと何らかのルールに従う
-
+	if v := os.Getenv("GAE_APPLICATION"); v != "" {
+		return v
+	}
+	if v := os.Getenv("GAE_LONG_APP_ID"); v != "" {
+		return v
+	}
+	if v := os.Getenv("GOOGLE_CLOUD_PROJECT"); v != "" {
+		return v
+	}
 	if v := os.Getenv("GCP_PROJECT"); v != "" {
 		return v
-	} else if v := os.Getenv("GOOGLE_CLOUD_PROJECT"); v != "" {
-		return v
-	} else if v := os.Getenv("GCLOUD_PROJECT"); v != "" {
+	}
+	if v := os.Getenv("GCLOUD_PROJECT"); v != "" {
 		return v
 	}
 

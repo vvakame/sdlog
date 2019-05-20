@@ -1,1 +1,4 @@
 .idea/
+
+build-cmd/
+coverage.txt

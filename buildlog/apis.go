@@ -73,7 +73,7 @@ func newApplicationLog(ctx context.Context, opts ...LogEntryOption) *LogEntry {
 	return logEntry
 }
 
-func newRequestLogEntry(ctx context.Context, r *http.Request) *LogEntry {
+func newHTTPRequestLogEntry(ctx context.Context, r *http.Request) *HTTPRequest {
 	u := *r.URL
 	u.Fragment = ""
 
@@ -82,22 +82,7 @@ func newRequestLogEntry(ctx context.Context, r *http.Request) *LogEntry {
 		logger = DefaultConfigurator
 	}
 
-	traceID, spanID := logger.TraceInfo(ctx)
-
-	if !strings.Contains(traceID, "/") {
-		traceID = fmt.Sprintf("projects/%s/traces/%s", logger.ProjectID(), traceID)
-	}
-
-	remoteIP := ""
-	if v := r.Header.Get("X-AppEngine-User-IP"); v != "" {
-		remoteIP = v
-	} else if v := r.Header.Get("X-Forwarded-For"); v != "" {
-		remoteIP = v
-	} else {
-		remoteIP = strings.SplitN(r.RemoteAddr, ":", 2)[0]
-	}
-
-	endAt := time.Now()
+	remoteIP := logger.RemoteIP(r)
 
 	falseV := false
 	httpRequestEntry := &HTTPRequest{
@@ -114,14 +99,7 @@ func newRequestLogEntry(ctx context.Context, r *http.Request) *LogEntry {
 		Protocol:                       r.Proto,
 	}
 
-	logEntry := &LogEntry{
-		Time:        Time(endAt),
-		HTTPRequest: httpRequestEntry,
-		Trace:       traceID,
-		SpanID:      spanID,
-	}
-
-	return logEntry
+	return httpRequestEntry
 }
 
 func newLogEntrySourceLocation(cfg *logEntryConfig) *LogEntrySourceLocation {

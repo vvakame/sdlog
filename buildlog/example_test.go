@@ -4,12 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"time"
+
 	"github.com/vvakame/sdlog/buildlog"
 	"go.opencensus.io/trace"
-	"time"
 )
 
-func Example_JSONPayload_Basic() {
+func Example_emitJSONPayload() {
 	ctx := context.Background()
 	ctx, span := trace.StartSpan(ctx, "test")
 	defer span.End()
@@ -31,10 +32,10 @@ func Example_JSONPayload_Basic() {
 	fmt.Println(string(b))
 
 	// Output:
-	// {"severity":"DEFAULT","time":"2019-05-18T13:47:00Z","logging.googleapis.com/trace":"projects/foobar/traces/65ed3bb1ceb342ba0ca62fa64076c738","logging.googleapis.com/spanId":"2325d572b51a4ba6","logging.googleapis.com/sourceLocation":{"file":"/tmp/123456/sdlog/buildlog/example_test.go","line":"10","function":"github.com/vvakame/sdlog/buildlog_test.Example_JSONPayload_Basic"}}
+	// {"severity":"DEFAULT","time":"2019-05-18T13:47:00Z","logging.googleapis.com/trace":"projects/foobar/traces/65ed3bb1ceb342ba0ca62fa64076c738","logging.googleapis.com/spanId":"2325d572b51a4ba6","logging.googleapis.com/sourceLocation":{"file":"/tmp/123456/sdlog/buildlog/example_test.go","line":"10","function":"github.com/vvakame/sdlog/buildlog_test.Example_emitJSONPayload"}}
 }
 
-func Example_JSONPayload_Embed() {
+func Example_emitJSONPayloadWithEmbed() {
 	ctx := context.Background()
 	ctx, span := trace.StartSpan(ctx, "test")
 	defer span.End()
@@ -69,10 +70,10 @@ func Example_JSONPayload_Embed() {
 	fmt.Println(string(b))
 
 	// Output:
-	// {"Message":"Hi!","severity":"DEFAULT","time":"2019-05-18T13:47:00Z","logging.googleapis.com/trace":"projects/foobar/traces/65ed3bb1ceb342ba0ca62fa64076c738","logging.googleapis.com/spanId":"2325d572b51a4ba6","logging.googleapis.com/sourceLocation":{"file":"/tmp/123456/sdlog/buildlog/example_test.go","line":"55","function":"github.com/vvakame/sdlog/buildlog_test.Example_JSONPayload_Embed"}}
+	// {"Message":"Hi!","severity":"DEFAULT","time":"2019-05-18T13:47:00Z","logging.googleapis.com/trace":"projects/foobar/traces/65ed3bb1ceb342ba0ca62fa64076c738","logging.googleapis.com/spanId":"2325d572b51a4ba6","logging.googleapis.com/sourceLocation":{"file":"/tmp/123456/sdlog/buildlog/example_test.go","line":"55","function":"github.com/vvakame/sdlog/buildlog_test.Example_emitJSONPayloadWithEmbed"}}
 }
 
-func Example_TextPayload() {
+func Example_emitTextPayload() {
 	ctx := context.Background()
 	ctx, span := trace.StartSpan(ctx, "test")
 	defer span.End()
@@ -95,5 +96,5 @@ func Example_TextPayload() {
 	fmt.Println(string(b))
 
 	// Output:
-	// {"severity":"DEFAULT","time":"2019-05-18T13:47:00Z","logging.googleapis.com/trace":"projects/foobar/traces/65ed3bb1ceb342ba0ca62fa64076c738","logging.googleapis.com/spanId":"2325d572b51a4ba6","logging.googleapis.com/sourceLocation":{"file":"/tmp/123456/sdlog/buildlog/example_test.go","line":"55","function":"github.com/vvakame/sdlog/buildlog_test.Example_TextPayload"},"message":"Hi!"}
+	// {"severity":"DEFAULT","time":"2019-05-18T13:47:00Z","logging.googleapis.com/trace":"projects/foobar/traces/65ed3bb1ceb342ba0ca62fa64076c738","logging.googleapis.com/spanId":"2325d572b51a4ba6","logging.googleapis.com/sourceLocation":{"file":"/tmp/123456/sdlog/buildlog/example_test.go","line":"55","function":"github.com/vvakame/sdlog/buildlog_test.Example_emitTextPayload"},"message":"Hi!"}
 }

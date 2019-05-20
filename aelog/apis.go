@@ -4,8 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/vvakame/sdlog/buildlog"
 	"net/http"
+
+	"github.com/vvakame/sdlog/buildlog"
 )
 
 // LogWriter use write log entry to somewhere. default is stdout.
