@@ -13,6 +13,9 @@ import (
 
 var _ buildlog.Configurator = (*aeConfigurator)(nil)
 
+// DefaultConfigurator in this package.
+var DefaultConfigurator = &aeConfigurator{}
+
 type aeConfigurator struct{}
 
 func (aeConfigurator) ProjectID() string {

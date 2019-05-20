@@ -3,6 +3,8 @@ package buildlog
 import (
 	"encoding/json"
 	"time"
+
+	"go.uber.org/zap/zapcore"
 )
 
 var _ json.Marshaler = Severity(0)
@@ -110,6 +112,15 @@ type LogEntrySourceLocation struct {
 	File     string `json:"file,omitempty"`
 	Line     int64  `json:"line,string,omitempty"`
 	Function string `json:"function,omitempty"`
+}
+
+// MarshalLogObject with encoder.
+func (sl *LogEntrySourceLocation) MarshalLogObject(encoder zapcore.ObjectEncoder) error {
+	encoder.AddString("file", sl.File)
+	encoder.AddInt64("line", sl.Line)
+	encoder.AddString("function", sl.Function)
+
+	return nil
 }
 
 var _ json.Marshaler = Time(time.Time{})

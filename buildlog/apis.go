@@ -26,6 +26,15 @@ func WithConfigurator(ctx context.Context, cfg Configurator) (context.Context, e
 	return context.WithValue(ctx, contextLoggerKey{}, cfg), nil
 }
 
+// ConfiguratorFromContext extract Configurator from ctx.
+func ConfiguratorFromContext(ctx context.Context) Configurator {
+	cfg, ok := ctx.Value(contextLoggerKey{}).(Configurator)
+	if !ok {
+		return nil
+	}
+	return cfg
+}
+
 // NewLogEntry returns *LogEntry for current executing line.
 func NewLogEntry(ctx context.Context, opts ...LogEntryOption) *LogEntry {
 	opts = append([]LogEntryOption{WithSourceLocationSkip(3)}, opts...)
