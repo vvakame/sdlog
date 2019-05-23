@@ -16,13 +16,18 @@ var _ buildlog.Configurator = (*aeConfigurator)(nil)
 type aeConfigurator struct{}
 
 func (aeConfigurator) ProjectID() string {
+	if v := os.Getenv("GOOGLE_CLOUD_PROJECT"); v != "" {
+		return v
+	}
 	if v := os.Getenv("GAE_APPLICATION"); v != "" {
+		// incoming `b~foobar` format
+		ss := strings.SplitN(v, "~", 2)
+		if len(ss) == 2 {
+			return ss[1]
+		}
 		return v
 	}
 	if v := os.Getenv("GAE_LONG_APP_ID"); v != "" {
-		return v
-	}
-	if v := os.Getenv("GOOGLE_CLOUD_PROJECT"); v != "" {
 		return v
 	}
 
