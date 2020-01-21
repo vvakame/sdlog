@@ -25,6 +25,13 @@ func WithHTTPRequest(ctx context.Context, r *http.Request) context.Context {
 	return context.WithValue(ctx, contextHTTPRequestKey{}, r)
 }
 
+type contextSourceLocationSkip struct{}
+
+// WithSourceLocationSkip is add skip source location number to context.
+func WithSourceLocationSkip(ctx context.Context, skip int) context.Context {
+	return context.WithValue(ctx, contextSourceLocationSkip{}, skip)
+}
+
 // Criticalf is like Debugf, but at Critical level.
 func Criticalf(ctx context.Context, format string, args ...interface{}) {
 	emitLog(ctx, buildlog.SeverityCritical, format, args...)
@@ -57,7 +64,11 @@ func emitLog(ctx context.Context, severity buildlog.Severity, format string, arg
 		panic(err)
 	}
 
-	logEntry := buildlog.NewLogEntry(ctx, buildlog.WithSourceLocationSkip(5))
+	skip, ok := ctx.Value(contextSourceLocationSkip{}).(int)
+	if !ok {
+		skip = 5
+	}
+	logEntry := buildlog.NewLogEntry(ctx, buildlog.WithSourceLocationSkip(skip))
 	logEntry.Severity = severity
 	logEntry.Message = fmt.Sprintf(format, args...)
 
