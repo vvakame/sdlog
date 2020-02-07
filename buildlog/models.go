@@ -13,23 +13,23 @@ type Severity int
 
 const (
 	// SeverityDefault provides severity level.
-	SeverityDefault Severity = 0
+	SeverityDefault Severity = iota * 100
 	// SeverityDebug provides severity level.
-	SeverityDebug = 100
+	SeverityDebug
 	// SeverityInfo provides severity level.
-	SeverityInfo = 200
+	SeverityInfo
 	// SeverityNotice provides severity level.
-	SeverityNotice = 300
+	SeverityNotice
 	// SeverityWarning provides severity level.
-	SeverityWarning = 400
+	SeverityWarning
 	// SeverityError provides severity level.
-	SeverityError = 500
+	SeverityError
 	// SeverityCritical provides severity level.
-	SeverityCritical = 600
+	SeverityCritical
 	// SeverityAlert provides severity level.
-	SeverityAlert = 700
+	SeverityAlert
 	// SeverityEmergency provides severity level.
-	SeverityEmergency = 800
+	SeverityEmergency
 )
 
 // MarshalJSON convert raw value to JSON value.
