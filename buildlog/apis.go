@@ -73,6 +73,7 @@ func newApplicationLog(ctx context.Context, opts ...LogEntryOption) *LogEntry {
 	return logEntry
 }
 
+//lint:ignore U1000 it will be use
 func newHTTPRequestLogEntry(ctx context.Context, r *http.Request) *HTTPRequest {
 	u := *r.URL
 	u.Fragment = ""

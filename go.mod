@@ -1,10 +1,10 @@
 module github.com/vvakame/sdlog
 
-go 1.12
+go 1.14
 
 require (
-	go.opencensus.io v0.21.0
-	golang.org/x/lint v0.0.0-20190227174305-5b3e6a55c961
-	golang.org/x/tools v0.0.0-20190226205152-f727befe758c
-	honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099
+	go.opencensus.io v0.22.3
+	golang.org/x/lint v0.0.0-20200302205851-738671d3881b
+	golang.org/x/tools v0.0.0-20200406213809-066fd1390ee0
+	honnef.co/go/tools v0.0.1-2020.1.3
 )
