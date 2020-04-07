@@ -11,11 +11,13 @@ import (
 	"go.opencensus.io/trace"
 )
 
-var _ buildlog.Configurator = (*aeConfigurator)(nil)
+var _ buildlog.Configurator = (*AppEngineConfigurator)(nil)
 
-type aeConfigurator struct{}
+// AppEngineConfigurator works on AppEngine.
+type AppEngineConfigurator struct{}
 
-func (aeConfigurator) ProjectID() string {
+// ProjectID returns current GCP project id.
+func (*AppEngineConfigurator) ProjectID() string {
 	if v := os.Getenv("GOOGLE_CLOUD_PROJECT"); v != "" {
 		return v
 	}
@@ -31,28 +33,30 @@ func (aeConfigurator) ProjectID() string {
 		return v
 	}
 
-	panic("environment variable GAE_APPLICATION is empty")
+	return ""
 }
 
-func (aeConfigurator) TraceInfo(ctx context.Context) (traceID, spanID string) {
+// TraceInfo returns TraceID and SpanID.
+func (*AppEngineConfigurator) TraceInfo(ctx context.Context) (traceID, spanID string) {
 	if span := trace.FromContext(ctx); span != nil {
 		return span.SpanContext().TraceID.String(), span.SpanContext().SpanID.String()
 	}
 
 	r, ok := ctx.Value(contextHTTPRequestKey{}).(*http.Request)
 	if !ok {
-		panic("ctx doesn't have trace & spanId info")
+		panic("ctx doesn't have *http.Request")
 	}
 
 	sc, ok := (&propagation.HTTPFormat{}).SpanContextFromRequest(r)
-	if !ok {
-		panic("ctx doesn't have trace & spanId info")
+	if ok {
+		return sc.TraceID.String(), sc.SpanID.String()
 	}
 
-	return sc.TraceID.String(), sc.SpanID.String()
+	return "", ""
 }
 
-func (aeConfigurator) RemoteIP(r *http.Request) string {
+// RemoteIP of client.
+func (*AppEngineConfigurator) RemoteIP(r *http.Request) string {
 	remoteIP := ""
 	if v := r.Header.Get("X-AppEngine-User-IP"); v != "" {
 		remoteIP = v
