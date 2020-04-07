@@ -1,4 +1,4 @@
-# Stackdriver Logging compatible logger
+# Cloud Logging compatible logger
 
 this logger help you to emit [special fields in structured payloads](https://cloud.google.com/logging/docs/agent/configuration#special-fields).
 You can emit LogEntry compatible format via stdout or stderr.
