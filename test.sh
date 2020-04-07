@@ -14,6 +14,6 @@ do
     go vet $package
 done
 golint -set_exit_status -min_confidence 0.6 $packages
-staticcheck -ignore github.com/vvakame/sdlog/buildlog/*.go:U1000 $packages
+staticcheck $packages
 
 go test $packages -count 1 -p 1 -coverpkg=./... -covermode=atomic -coverprofile=coverage.txt $@
