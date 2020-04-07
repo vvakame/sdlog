@@ -12,7 +12,7 @@ import (
 type contextLoggerKey struct{}
 
 // DefaultConfigurator will use logging without WithConfigurator.
-var DefaultConfigurator Configurator = &appengineConfigurator{}
+var DefaultConfigurator Configurator = &GCPDefaultConfigurator{}
 
 // Configurator provides some value from environment.
 type Configurator interface {
@@ -47,15 +47,15 @@ func WithSourceLocationSkip(skip int) LogEntryOption {
 }
 
 func newApplicationLog(ctx context.Context, opts ...LogEntryOption) *LogEntry {
-	logger, ok := ctx.Value(contextLoggerKey{}).(Configurator)
+	configurator, ok := ctx.Value(contextLoggerKey{}).(Configurator)
 	if !ok {
-		logger = DefaultConfigurator
+		configurator = DefaultConfigurator
 	}
 
-	traceID, spanID := logger.TraceInfo(ctx)
+	traceID, spanID := configurator.TraceInfo(ctx)
 
-	if !strings.Contains(traceID, "/") {
-		traceID = fmt.Sprintf("projects/%s/traces/%s", logger.ProjectID(), traceID)
+	if traceID != "" && !strings.Contains(traceID, "/") {
+		traceID = fmt.Sprintf("projects/%s/traces/%s", configurator.ProjectID(), traceID)
 	}
 
 	cfg := &logEntryConfig{}

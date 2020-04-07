@@ -59,7 +59,7 @@ func Warningf(ctx context.Context, format string, args ...interface{}) {
 }
 
 func emitLog(ctx context.Context, severity buildlog.Severity, format string, args ...interface{}) {
-	ctx, err := buildlog.WithConfigurator(ctx, aeConfigurator{})
+	ctx, err := buildlog.WithConfigurator(ctx, &AppEngineConfigurator{})
 	if err != nil {
 		panic(err)
 	}
