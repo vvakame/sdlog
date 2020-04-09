@@ -44,7 +44,8 @@ func (*AppEngineConfigurator) TraceInfo(ctx context.Context) (traceID, spanID st
 
 	r, ok := ctx.Value(contextHTTPRequestKey{}).(*http.Request)
 	if !ok {
-		panic("ctx doesn't have *http.Request")
+		// this case is common pattern in unit test.
+		return "", ""
 	}
 
 	sc, ok := (&propagation.HTTPFormat{}).SpanContextFromRequest(r)
