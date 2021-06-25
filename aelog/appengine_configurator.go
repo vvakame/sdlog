@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"cloud.google.com/go/compute/metadata"
 	"github.com/vvakame/sdlog/buildlog"
 	"go.opencensus.io/exporter/stackdriver/propagation"
 	"go.opencensus.io/trace"
@@ -31,6 +32,13 @@ func (*AppEngineConfigurator) ProjectID() string {
 	}
 	if v := os.Getenv("GAE_LONG_APP_ID"); v != "" {
 		return v
+	}
+	if metadata.OnGCE() {
+		v, err := metadata.ProjectID()
+		if err == nil {
+			return v
+		}
+		// Returns the value only when the value can be obtained, ignores the error
 	}
 
 	return ""
