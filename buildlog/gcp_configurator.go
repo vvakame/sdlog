@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"cloud.google.com/go/compute/metadata"
 	"go.opencensus.io/trace"
 )
 
@@ -24,6 +25,13 @@ func (cfg *GCPDefaultConfigurator) ProjectID() string {
 	}
 	if v := os.Getenv("GCLOUD_PROJECT"); v != "" {
 		return v
+	}
+	if metadata.OnGCE() {
+		v, err := metadata.ProjectID()
+		if err == nil {
+			return v
+		}
+		// Returns the value only when the value can be obtained, ignores the error
 	}
 
 	return ""
