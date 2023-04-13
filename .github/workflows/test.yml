@@ -1,0 +1,30 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request_target: {}
+
+jobs:
+  test:
+    name: Test
+    runs-on:
+      labels:
+        - ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-go@v3
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Prepare dependencies
+        run: |-
+          ./setup.sh
+      - name: Run tests
+        run: |-
+          ./test.sh
