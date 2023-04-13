@@ -25,10 +25,7 @@ type HandlerOptions struct {
 }
 
 // NewHandler creates a Cloud Logging compatible handler with the given options that writes to w.
-func (ho *HandlerOptions) NewHandler(w io.Writer) slog.Handler {
-	if ho == nil {
-		ho = &HandlerOptions{}
-	}
+func (ho HandlerOptions) NewHandler(w io.Writer) slog.Handler {
 	if ho.ProjectID == "" {
 		ho.ProjectID = gcpProjectID()
 	}
