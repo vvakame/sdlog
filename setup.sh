@@ -11,4 +11,3 @@ mkdir build-cmd
 export GOBIN=`pwd -P`/build-cmd
 go install golang.org/x/tools/cmd/goimports
 go install golang.org/x/lint/golint
-go install honnef.co/go/tools/cmd/staticcheck
