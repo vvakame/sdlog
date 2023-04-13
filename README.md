@@ -9,4 +9,4 @@ see examples.
 
 * aelog - [AppEngine log package](https://godoc.org/google.golang.org/appengine/log) compat api.
 * buildlog - building block for logging.
- 
+* gcpslog - slog handler.
