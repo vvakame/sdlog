@@ -34,11 +34,11 @@ func (ho HandlerOptions) NewHandler(w io.Writer) slog.Handler {
 	}
 
 	h := &handler{
-		base: slog.HandlerOptions{
+		base: slog.NewJSONHandler(w, &slog.HandlerOptions{
 			AddSource:   false,
 			Level:       ho.Level,
 			ReplaceAttr: replaceAttrs,
-		}.NewJSONHandler(w),
+		}),
 		projectID: ho.ProjectID,
 		traceInfo: ho.TraceInfo,
 	}
