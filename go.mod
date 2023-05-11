@@ -1,11 +1,11 @@
 module github.com/vvakame/sdlog
 
-go 1.19
+go 1.20
 
 require (
 	cloud.google.com/go v0.26.0
 	go.opencensus.io v0.24.0
-	golang.org/x/exp v0.0.0-20230321023759-10a507213a29
+	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b
 	golang.org/x/tools v0.2.0
 )
