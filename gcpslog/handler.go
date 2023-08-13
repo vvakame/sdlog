@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log/slog"
 	"os"
 	"runtime"
 	"strconv"
@@ -12,7 +13,6 @@ import (
 
 	"cloud.google.com/go/compute/metadata"
 	"go.opencensus.io/trace"
-	"golang.org/x/exp/slog"
 )
 
 // spec. https://cloud.google.com/logging/docs/agent/logging/configuration#special-fields
