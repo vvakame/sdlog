@@ -7,7 +7,7 @@ import (
 	"log/slog"
 	"testing"
 
-	"github.com/vvakame/sdlog/gcpslog"
+	"github.com/vvakame/sdlog/v2/gcpslog"
 )
 
 func TestHandler(t *testing.T) {
