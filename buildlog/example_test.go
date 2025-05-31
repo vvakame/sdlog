@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/vvakame/sdlog/buildlog"
-	"go.opencensus.io/trace"
+	"github.com/vvakame/sdlog/v2/buildlog"
+	"go.opentelemetry.io/otel/trace/noop"
 )
 
 func Example_emitJSONPayload() {
 	ctx := context.Background()
-	ctx, span := trace.StartSpan(ctx, "test")
+	tp := noop.NewTracerProvider()
+	ctx, span := tp.Tracer("test").Start(ctx, "test")
 	defer span.End()
 
 	logEntry := buildlog.NewLogEntry(ctx)
@@ -32,12 +33,13 @@ func Example_emitJSONPayload() {
 	fmt.Println(string(b))
 
 	// Output:
-	// {"severity":"DEFAULT","time":"2019-05-18T13:47:00Z","logging.googleapis.com/trace":"projects/foobar/traces/65ed3bb1ceb342ba0ca62fa64076c738","logging.googleapis.com/spanId":"2325d572b51a4ba6","logging.googleapis.com/sourceLocation":{"file":"/tmp/123456/sdlog/buildlog/example_test.go","line":"10","function":"github.com/vvakame/sdlog/buildlog_test.Example_emitJSONPayload"}}
+	// {"severity":"DEFAULT","time":"2019-05-18T13:47:00Z","logging.googleapis.com/trace":"projects/foobar/traces/65ed3bb1ceb342ba0ca62fa64076c738","logging.googleapis.com/spanId":"2325d572b51a4ba6","logging.googleapis.com/sourceLocation":{"file":"/tmp/123456/sdlog/buildlog/example_test.go","line":"10","function":"github.com/vvakame/sdlog/v2/buildlog_test.Example_emitJSONPayload"}}
 }
 
 func Example_emitJSONPayloadWithEmbed() {
 	ctx := context.Background()
-	ctx, span := trace.StartSpan(ctx, "test")
+	tp := noop.NewTracerProvider()
+	ctx, span := tp.Tracer("test").Start(ctx, "test")
 	defer span.End()
 
 	type MyLog struct {
@@ -70,12 +72,13 @@ func Example_emitJSONPayloadWithEmbed() {
 	fmt.Println(string(b))
 
 	// Output:
-	// {"Message":"Hi!","severity":"DEFAULT","time":"2019-05-18T13:47:00Z","logging.googleapis.com/trace":"projects/foobar/traces/65ed3bb1ceb342ba0ca62fa64076c738","logging.googleapis.com/spanId":"2325d572b51a4ba6","logging.googleapis.com/sourceLocation":{"file":"/tmp/123456/sdlog/buildlog/example_test.go","line":"55","function":"github.com/vvakame/sdlog/buildlog_test.Example_emitJSONPayloadWithEmbed"}}
+	// {"Message":"Hi!","severity":"DEFAULT","time":"2019-05-18T13:47:00Z","logging.googleapis.com/trace":"projects/foobar/traces/65ed3bb1ceb342ba0ca62fa64076c738","logging.googleapis.com/spanId":"2325d572b51a4ba6","logging.googleapis.com/sourceLocation":{"file":"/tmp/123456/sdlog/buildlog/example_test.go","line":"55","function":"github.com/vvakame/sdlog/v2/buildlog_test.Example_emitJSONPayloadWithEmbed"}}
 }
 
 func Example_emitTextPayload() {
 	ctx := context.Background()
-	ctx, span := trace.StartSpan(ctx, "test")
+	tp := noop.NewTracerProvider()
+	ctx, span := tp.Tracer("test").Start(ctx, "test")
 	defer span.End()
 
 	logEntry := buildlog.NewLogEntry(ctx)
@@ -96,5 +99,5 @@ func Example_emitTextPayload() {
 	fmt.Println(string(b))
 
 	// Output:
-	// {"severity":"DEFAULT","time":"2019-05-18T13:47:00Z","logging.googleapis.com/trace":"projects/foobar/traces/65ed3bb1ceb342ba0ca62fa64076c738","logging.googleapis.com/spanId":"2325d572b51a4ba6","logging.googleapis.com/sourceLocation":{"file":"/tmp/123456/sdlog/buildlog/example_test.go","line":"55","function":"github.com/vvakame/sdlog/buildlog_test.Example_emitTextPayload"},"message":"Hi!"}
+	// {"severity":"DEFAULT","time":"2019-05-18T13:47:00Z","logging.googleapis.com/trace":"projects/foobar/traces/65ed3bb1ceb342ba0ca62fa64076c738","logging.googleapis.com/spanId":"2325d572b51a4ba6","logging.googleapis.com/sourceLocation":{"file":"/tmp/123456/sdlog/buildlog/example_test.go","line":"55","function":"github.com/vvakame/sdlog/v2/buildlog_test.Example_emitTextPayload"},"message":"Hi!"}
 }
