@@ -7,12 +7,13 @@ import (
 	"time"
 
 	"github.com/vvakame/sdlog/buildlog"
-	"go.opencensus.io/trace"
+	"go.opentelemetry.io/otel/trace/noop"
 )
 
 func Example_emitJSONPayload() {
 	ctx := context.Background()
-	ctx, span := trace.StartSpan(ctx, "test")
+	tp := noop.NewTracerProvider()
+	ctx, span := tp.Tracer("test").Start(ctx, "test")
 	defer span.End()
 
 	logEntry := buildlog.NewLogEntry(ctx)
@@ -37,7 +38,8 @@ func Example_emitJSONPayload() {
 
 func Example_emitJSONPayloadWithEmbed() {
 	ctx := context.Background()
-	ctx, span := trace.StartSpan(ctx, "test")
+	tp := noop.NewTracerProvider()
+	ctx, span := tp.Tracer("test").Start(ctx, "test")
 	defer span.End()
 
 	type MyLog struct {
@@ -75,7 +77,8 @@ func Example_emitJSONPayloadWithEmbed() {
 
 func Example_emitTextPayload() {
 	ctx := context.Background()
-	ctx, span := trace.StartSpan(ctx, "test")
+	tp := noop.NewTracerProvider()
+	ctx, span := tp.Tracer("test").Start(ctx, "test")
 	defer span.End()
 
 	logEntry := buildlog.NewLogEntry(ctx)

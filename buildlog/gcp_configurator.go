@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"go.opencensus.io/trace"
+	"go.opentelemetry.io/otel/trace"
 )
 
 var _ Configurator = (*GCPDefaultConfigurator)(nil)
@@ -31,8 +31,9 @@ func (cfg *GCPDefaultConfigurator) ProjectID() string {
 
 // TraceInfo returns TraceID and SpanID.
 func (cfg *GCPDefaultConfigurator) TraceInfo(ctx context.Context) (string, string) {
-	if span := trace.FromContext(ctx); span != nil {
-		return span.SpanContext().TraceID.String(), span.SpanContext().SpanID.String()
+	if span := trace.SpanFromContext(ctx); span != nil {
+		span.SpanContext().TraceID()
+		return span.SpanContext().TraceID().String(), span.SpanContext().SpanID().String()
 	}
 
 	return "", ""

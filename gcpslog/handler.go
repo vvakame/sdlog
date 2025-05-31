@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/compute/metadata"
-	"go.opencensus.io/trace"
+	"go.opentelemetry.io/otel/trace"
 )
 
 // spec. https://cloud.google.com/logging/docs/agent/logging/configuration#special-fields
@@ -120,12 +120,12 @@ func gcpProjectID() string {
 }
 
 func openCensusTraceInfo(ctx context.Context) (string, string) {
-	span := trace.FromContext(ctx)
+	span := trace.SpanFromContext(ctx)
 	if span == nil {
 		return "", ""
 	}
 
-	return span.SpanContext().TraceID.String(), span.SpanContext().SpanID.String()
+	return span.SpanContext().TraceID().String(), span.SpanContext().SpanID().String()
 }
 
 func replaceAttrs(groups []string, a slog.Attr) slog.Attr {
