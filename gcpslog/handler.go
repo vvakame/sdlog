@@ -30,7 +30,7 @@ func (ho HandlerOptions) NewHandler(w io.Writer) slog.Handler {
 		ho.ProjectID = gcpProjectID()
 	}
 	if ho.TraceInfo == nil {
-		ho.TraceInfo = openCensusTraceInfo
+		ho.TraceInfo = otelTraceInfo
 	}
 
 	h := &handler{
@@ -119,7 +119,7 @@ func gcpProjectID() string {
 	return ""
 }
 
-func openCensusTraceInfo(ctx context.Context) (string, string) {
+func otelTraceInfo(ctx context.Context) (string, string) {
 	span := trace.SpanFromContext(ctx)
 	if span == nil {
 		return "", ""
@@ -129,9 +129,16 @@ func openCensusTraceInfo(ctx context.Context) (string, string) {
 }
 
 func replaceAttrs(groups []string, a slog.Attr) slog.Attr {
+	if len(groups) > 0 {
+		return a
+	}
+
 	switch a.Key {
 	case slog.TimeKey:
 		a.Key = "time"
+		if a.Value.Kind() != slog.KindTime {
+			return a
+		}
 		a.Value = slog.StringValue(a.Value.Time().Format(time.RFC3339Nano))
 	case slog.LevelKey:
 		a.Key = "severity"

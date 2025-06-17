@@ -29,6 +29,7 @@ func TestHandler(t *testing.T) {
 	logger.Enabled(ctx, slog.LevelDebug)
 	logger.InfoContext(ctx, "info message")
 	logger.ErrorContext(ctx, "error message", "error", errors.New("error"))
+	logger.WarnContext(ctx, "warn message", slog.String("time", "2025-06-17T22:00:00Z"))
 	logger.LogAttrs(ctx, slog.LevelDebug, "log attrs", slog.String("key", "value"))
 
 	t.Log(buf.String())
