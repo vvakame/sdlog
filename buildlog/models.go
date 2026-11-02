@@ -68,7 +68,7 @@ func (severity Severity) String() string {
 type LogEntry struct {
 	Severity       Severity                `json:"severity"`
 	HTTPRequest    *HTTPRequest            `json:"httpRequest,omitempty"`
-	Time           Time                    `json:"time,omitempty"`
+	Time           Time                    `json:"time"`
 	Trace          string                  `json:"logging.googleapis.com/trace,omitempty"`
 	SpanID         string                  `json:"logging.googleapis.com/spanId,omitempty"`
 	Operation      *LogEntryOperation      `json:"logging.googleapis.com/operation,omitempty"`
@@ -133,7 +133,7 @@ func (d Duration) MarshalJSON() ([]byte, error) {
 	secs := nanos / 1e9
 	nanos -= secs * 1e9
 
-	v := make(map[string]interface{})
+	v := make(map[string]any)
 	v["seconds"] = int64(secs)
 	v["nanos"] = int32(nanos)
 
