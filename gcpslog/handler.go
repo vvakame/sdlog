@@ -22,6 +22,12 @@ type HandlerOptions struct {
 	Level     slog.Leveler
 	ProjectID string
 	TraceInfo func(ctx context.Context) (traceID string, spanID string)
+
+	// ReplaceAttr is called to rewrite each non-group attribute before it is logged.
+	// It has the same semantics as slog.HandlerOptions.ReplaceAttr, and is called
+	// before the Cloud Logging specific conversion of the built-in attributes
+	// (time, level, message), so it receives them with the standard slog keys.
+	ReplaceAttr func(groups []string, a slog.Attr) slog.Attr
 }
 
 // NewHandler creates a Cloud Logging compatible handler with the given options that writes to w.
@@ -37,7 +43,7 @@ func (ho HandlerOptions) NewHandler(w io.Writer) slog.Handler {
 		base: slog.NewJSONHandler(w, &slog.HandlerOptions{
 			AddSource:   false,
 			Level:       ho.Level,
-			ReplaceAttr: replaceAttrs,
+			ReplaceAttr: chainReplaceAttr(ho.ReplaceAttr, replaceAttrs),
 		}),
 		projectID: ho.ProjectID,
 		traceInfo: ho.TraceInfo,
@@ -126,6 +132,21 @@ func otelTraceInfo(ctx context.Context) (string, string) {
 	}
 
 	return span.SpanContext().TraceID().String(), span.SpanContext().SpanID().String()
+}
+
+func chainReplaceAttr(first, second func(groups []string, a slog.Attr) slog.Attr) func(groups []string, a slog.Attr) slog.Attr {
+	if first == nil {
+		return second
+	}
+
+	return func(groups []string, a slog.Attr) slog.Attr {
+		a = first(groups, a)
+		if a.Equal(slog.Attr{}) {
+			// dropped by first
+			return a
+		}
+		return second(groups, a)
+	}
 }
 
 func replaceAttrs(groups []string, a slog.Attr) slog.Attr {
